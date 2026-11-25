@@ -1,8 +1,12 @@
 # Solver N-Queens — Tapip Anonim (P2-11)
 
-## Normal
+## Normal v1
 
-`normal.cpp` mengimplementasikan `std::vector<std::vector<int>> solveNQueens(int n)` dalam C++17. Fungsi menerima ukuran papan `4 ≤ n ≤ 12` dan mengembalikan semua susunan valid, masing-masing satu kali. Dalam setiap solusi, `solusi[baris]` berisi kolom ratu dengan indeks mulai dari 0.
+`Normal/normal-v1.cpp` adalah kode utama untuk diedit dan diunggah. Pencarian solver lokal di `driver/scripts/discover.mjs` telah disesuaikan agar membaca subfolder secara rekursif. Folder relatif menjadi kategori solver, yaitu `Submissions/Normal`.
+
+`normal-v1.cpp` mengimplementasikan `std::vector<std::vector<int>> solveNQueens(int n)` dalam C++17. Fungsi menerima ukuran papan `4 ≤ n ≤ 12` dan mengembalikan semua susunan valid, masing-masing satu kali. Dalam setiap solusi, `solusi[baris]` berisi kolom ratu dengan indeks mulai dari 0.
+
+Versi v1 menjadi acuan awal untuk membandingkan kebenaran, waktu, dan memori pada optimasi berikutnya. Simpan versi berikutnya dengan nama seperti `normal-v2.cpp` agar tiap versi dapat dipilih dan diuji secara terpisah. Hasil benchmark di bawah adalah milik v1.
 
 ### Algoritma
 
@@ -28,9 +32,9 @@ npm run build:solvers -- --native
 npm run dev
 ```
 
-Pilih solver **Submissions → normal** dan kasus **Normal**. Klik **Apply changes** setelah mengubah ukuran papan, lalu **Run**. Jumlah solusi yang diharapkan untuk `N = 4–12` berturut-turut adalah **2, 10, 4, 40, 92, 352, 724, 2.680, dan 14.200**.
+Pilih solver **Submissions/Normal → normal-v1** dan kasus **Normal**. Klik **Apply changes** setelah mengubah ukuran papan, lalu **Run**. Jumlah solusi yang diharapkan untuk `N = 4–12` berturut-turut adalah **2, 10, 4, 40, 92, 352, 724, 2.680, dan 14.200**.
 
-Untuk leaderboard, pilih kasus **Normal** dan unggah satu file [normal.cpp](normal.cpp). File berukuran sekitar 2,2 KB, menyertakan `nqueens.h`, dan memakai fungsi yang dipanggil tester. Solver menjalankan pencarian deterministik tanpa `main()`, thread, pencetakan, akses file, atau jaringan.
+Untuk leaderboard, pilih kasus **Normal** dan unggah satu file [Normal/normal-v1.cpp](Normal/normal-v1.cpp). File berukuran sekitar 2,2 KB, menyertakan `nqueens.h`, dan memakai fungsi yang dipanggil tester. Solver menjalankan pencarian deterministik tanpa `main()`, thread, pencetakan, akses file, atau jaringan.
 
 ### Hasil validasi lokal
 

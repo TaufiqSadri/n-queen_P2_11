@@ -76,7 +76,7 @@ function run(args) {
 // Nothing to build is an error before anything is touched.
 const solvers = discoverSolvers(repo);
 if (solvers.length === 0) {
-  console.error("No solvers found. A solver is a .cpp directly in a folder of Solver/, as Solver/<category>/<name>.cpp.");
+  console.error("No solvers found. Place a .cpp in a category folder or subfolder under Solver/.");
   process.exit(1);
 }
 

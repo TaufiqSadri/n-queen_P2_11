@@ -1,7 +1,7 @@
 export interface DiscoveredSolver {
   /** `category/name`, which is also where the build writes it: Solver/dist/<id>/ */
   id: string;
-  /** The folder of the source, directly under Solver/. */
+  /** The full relative folder path under Solver/, including nested folders. */
   category: string;
   /** The file name without .cpp. */
   name: string;

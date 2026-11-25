@@ -1,6 +1,6 @@
-// Finds the solvers: Solver/<category>/<name>.cpp. The category is the folder and the name is the file without .cpp. A .cpp
-// that sits directly in a category folder is one solver, compiled into one module. Anything else (headers, subfolders,
-// files outside a category) is not a solver. Solver/dist is the build output, not a category.
+// Finds .cpp solvers recursively inside category folders under Solver/.
+// The category is the full relative folder path, for example Submissions/Normal.
+// Solver/dist is build output and is excluded from discovery.
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 
@@ -29,27 +29,30 @@ export function discoverSolvers(root) {
   const base = path.join(root, "Solver");
   if (!existsSync(base)) return [];
   const solvers = [];
-  for (const category of readdirSync(base).sort(byCode)) {
-    if (NOT_CATEGORIES.has(category) || category.startsWith(".")) continue;
+  function visit(category) {
     const dir = path.join(base, category);
-    if (!statSync(dir).isDirectory()) continue;
-    // By name, not by file name: "a.cpp" sorts after "a-b.cpp" because "." comes after "-", but "a" comes before "a-b".
-    const entries = readdirSync(dir)
-      .filter((e) => e.endsWith(".cpp"))
-      .sort((a, b) => byCode(a.slice(0, -4), b.slice(0, -4)));
-    for (const entry of entries) {
-      const source = path.join(dir, entry);
-      if (!statSync(source).isFile()) continue;
-      const name = entry.slice(0, -".cpp".length);
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      if (entry.name.startsWith(".")) continue;
+      if (entry.isDirectory()) {
+        visit(`${category}/${entry.name}`);
+        continue;
+      }
+      if (!entry.isFile() || !entry.name.endsWith(".cpp")) continue;
+      const source = path.join(dir, entry.name);
+      const name = entry.name.slice(0, -".cpp".length);
       solvers.push({
         id: `${category}/${name}`,
         category,
         name,
-        file: `Solver/${category}/${entry}`,
+        file: `Solver/${category}/${entry.name}`,
         source,
         snapshots: usesSnapshots(readFileSync(source, "utf8")),
       });
     }
   }
-  return solvers;
+  for (const category of readdirSync(base)) {
+    if (NOT_CATEGORIES.has(category) || category.startsWith(".")) continue;
+    if (statSync(path.join(base, category)).isDirectory()) visit(category);
+  }
+  return solvers.sort((a, b) => byCode(a.category, b.category) || byCode(a.name, b.name));
 }
