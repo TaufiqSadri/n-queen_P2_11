@@ -26,6 +26,22 @@ V2 memakai backtracking dengan tiga bitmask dan memanfaatkan empat rotasi papan 
 
 V2 memeriksa kandidat baris berikutnya sebelum memanggil rekursi dan memproses dua tingkat pencarian per panggilan. Dengan `T` kandidat yang dicoba dan `S` solusi yang dikembalikan, waktu tetap berorde `O(T + n × S)`. Pemangkasan simetri mengurangi `T`. Matriks papan lengkap tidak disimpan selama pencarian. Ruang tambahannya `O(n)`, termasuk jalur, mask, dan rotasi sementara. Heap hasil tetap berorde `O(n × S)`.
 
+## Pre-placed v1
+
+[Preplaced/preplaced-v1.cpp](Preplaced/preplaced-v1.cpp) mengimplementasikan `solvePreplaced(n, preplaced)` untuk papan berukuran `4 ≤ n ≤ 12`. Setiap solusi mencantumkan kolom ratu di seluruh baris, termasuk ratu terkunci. Jika papan tidak bisa diselesaikan, fungsi mengembalikan daftar kosong.
+
+### Algoritma
+
+1. Masukkan posisi ratu terkunci dan periksa konflik antarposisi. Untuk tiap baris kosong, hitung bitmask kolom yang masih aman dari semua ratu terkunci.
+2. Jalankan backtracking hanya pada baris kosong. Setelah menempatkan ratu, geser bitmask serangan diagonal sesuai jarak ke baris kosong berikutnya. Jika baris itu kehabisan kandidat, hentikan cabang.
+3. Simpan papan lengkap saat semua baris terisi. Jika `P = 0`, cari satu sisi papan dan tambahkan hasil cerminnya. Pada papan ganjil dengan ratu pertama di tengah, posisi ratu kedua menentukan sisi yang dicari.
+
+Dasar pencarian bitmask untuk kasus ini dijelaskan dalam [Gent, Jefferson, dan Nightingale, *Complexity of n-Queens Completion*](https://eprints.whiterose.ac.uk/id/eprint/141513/1/n_queens_jair.pdf).
+
+### Waktu dan memori
+
+Jika `P` adalah jumlah ratu terkunci, `T` jumlah kandidat yang dicoba selama pencarian, dan `S` jumlah solusi, waktu total adalah `O(P + n + T + n × S)`. Kedalaman rekursi paling banyak `n - P`. Ruang tambahan untuk pencarian adalah `O(n)`, dengan heap `O(n × S)` untuk hasil.
+
 ## Menjalankan dan mengunggah solver
 
 Jalankan dari root repo pada macOS dengan Emscripten yang sudah terpasang.
@@ -36,6 +52,6 @@ npm run build:solvers -- --native
 npm run dev
 ```
 
-Di tester, pilih kasus **Normal** dan solver **normal-v1** atau **normal-v2** di grup **Submissions/Normal**. Klik **Apply changes** setelah mengubah ukuran papan, lalu klik **Run**.
+Di tester, pilih kasus **Normal** dan solver **normal-v1** atau **normal-v2** di grup **Submissions/Normal**. Untuk kasus **Pre-placed**, pilih **preplaced-v1** di grup **Submissions/Preplaced**. Klik **Apply changes** setelah mengubah papan, lalu klik **Run**.
 
-Untuk leaderboard, pilih kasus **Normal** dan unggah satu file `.cpp` dari versi yang ingin dikirim.
+Untuk leaderboard, pilih kategori yang sesuai dengan solver, lalu unggah satu file `.cpp`.
