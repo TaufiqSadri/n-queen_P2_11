@@ -26,6 +26,14 @@ V2 memakai backtracking dengan tiga bitmask dan memanfaatkan empat rotasi papan 
 
 V2 memeriksa kandidat baris berikutnya sebelum memanggil rekursi dan memproses dua tingkat pencarian per panggilan. Dengan `T` kandidat yang dicoba dan `S` solusi yang dikembalikan, waktu tetap berorde `O(T + n × S)`. Pemangkasan simetri mengurangi `T`. Matriks papan lengkap tidak disimpan selama pencarian. Ruang tambahannya `O(n)`, termasuk jalur, mask, dan rotasi sementara. Heap hasil tetap berorde `O(n × S)`.
 
+## Normal v3
+
+[Normal/normal-v3.cpp](Normal/normal-v3.cpp) mempertahankan pencarian bitmask dan simetri v2. Saat tinggal dua baris, solver menentukan penempatan langsung. Dua kolom tersisa yang bersebelahan langsung menggugurkan cabang karena ratu pada kedua baris tersebut pasti bertemu di diagonal.
+
+Untuk membandingkan satu solusi dengan rotasi dan pencerminannya, solver mengemas setiap posisi kolom dalam 4 bit. Seluruh papan muat dalam satu bilangan 64 bit, sehingga orientasi bisa dibandingkan langsung. Solver menyimpan jalur pencarian dan mask per baris dalam tipe yang lebih kecil, lalu mengubah papan ke `std::vector<int>` saat mengembalikan hasil.
+
+Kompleksitasnya tetap `O(T + n × S)` untuk waktu, dengan `T` kandidat yang dicoba dan `S` solusi. Ruang tambahan pencarian `O(n)`, dan heap hasil `O(n × S)`.
+
 ## Pre-placed v1
 
 [Preplaced/preplaced-v1.cpp](Preplaced/preplaced-v1.cpp) mengimplementasikan `solvePreplaced(n, preplaced)` untuk papan berukuran `4 ≤ n ≤ 12`. Setiap solusi mencantumkan kolom ratu di seluruh baris, termasuk ratu terkunci. Jika papan tidak bisa diselesaikan, fungsi mengembalikan daftar kosong.
@@ -58,7 +66,7 @@ npm run build:solvers -- --native
 npm run dev
 ```
 
-Di tester, pilih kasus **Normal** dan solver **normal-v1** atau **normal-v2** di grup **Submissions/Normal**. Untuk kasus **Pre-placed**, pilih **preplaced-v1** atau **preplaced-v2** di grup **Submissions/Preplaced**. Untuk kasus **Walled**, pilih **walled-v1**, **walled-v2**, atau **walled-v3** di grup **Submissions/Walled**. Klik **Apply changes** setelah mengubah papan, lalu klik **Run**.
+Di tester, pilih kasus **Normal** dan solver **normal-v1**, **normal-v2**, atau **normal-v3** di grup **Submissions/Normal**. Untuk kasus **Pre-placed**, pilih **preplaced-v1** atau **preplaced-v2** di grup **Submissions/Preplaced**. Untuk kasus **Walled**, pilih **walled-v1**, **walled-v2**, atau **walled-v3** di grup **Submissions/Walled**. Klik **Apply changes** setelah mengubah papan, lalu klik **Run**.
 
 Untuk leaderboard, pilih kategori yang sesuai dengan solver, lalu unggah satu file `.cpp`.
 
