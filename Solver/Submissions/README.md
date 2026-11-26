@@ -48,18 +48,6 @@ Jika `P` adalah jumlah ratu terkunci, `T` jumlah kandidat yang dicoba selama pen
 
 Jika sejak awal hanya ada satu atau dua baris kosong, solver menyelesaikannya langsung. Untuk dua baris, kedua penempatan akan berkonflik secara diagonal jika jarak dua kolom yang tersisa sama dengan jarak kedua baris. Jika ada setidaknya lima baris kosong dan papan berisi ratu terkunci, solver membandingkan hasil kali jumlah kandidat pada dua baris kosong pertama dari tiap ujung papan. Pencarian dimulai dari ujung dengan perkiraan cabang lebih sedikit. Jika perkiraannya sama, pencarian dimulai dari atas. Batas kompleksitasnya tetap sama dengan v1.
 
-## Acuan hasil server
-
-Hasil kompetisi pada 26 November 2026.
-
-| Solver | Submission | Status | Kasus lulus | Waktu total | Memori total |
-| --- | --- | --- | ---: | ---: | ---: |
-| Normal v2 | [#369](https://nqueen.ghiffaribraviah.xyz/#/c/3/submissions/369) | Scored | 9/9 | 4,04 ms | 1,100 MB |
-| Pre-placed v1 | [#370](https://nqueen.ghiffaribraviah.xyz/#/c/3/submissions/370) | Scored | 27/27 | 214 µs (0,214 ms) | 57,37 KB |
-
-- Pada Normal v2, tes ke-9 memakan 3,14 ms dari 4,04 ms dan mencatat 889,86 KB. Prioritaskan tes itu saat membandingkan optimasi Normal berikutnya.
-- Pada Pre-placed v1, tes pertama mencatat 1.857 byte, terdiri dari 1.488 byte data statis, 228 byte stack, dan 141 byte heap. Bandingkan waktu dan memori total v2 dengan submission #370 setelah v2 diuji di server.
-
 ## Menjalankan dan mengunggah solver
 
 Jalankan dari root repo pada macOS dengan Emscripten yang sudah terpasang.
