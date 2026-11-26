@@ -58,6 +58,134 @@ npm run build:solvers -- --native
 npm run dev
 ```
 
-Di tester, pilih kasus **Normal** dan solver **normal-v1** atau **normal-v2** di grup **Submissions/Normal**. Untuk kasus **Pre-placed**, pilih **preplaced-v1** atau **preplaced-v2** di grup **Submissions/Preplaced**. Klik **Apply changes** setelah mengubah papan, lalu klik **Run**.
+Di tester, pilih kasus **Normal** dan solver **normal-v1** atau **normal-v2** di grup **Submissions/Normal**. Untuk kasus **Pre-placed**, pilih **preplaced-v1** atau **preplaced-v2** di grup **Submissions/Preplaced**. Untuk kasus **Walled**, pilih **walled-v1**, **walled-v2**, atau **walled-v3** di grup **Submissions/Walled**. Klik **Apply changes** setelah mengubah papan, lalu klik **Run**.
 
 Untuk leaderboard, pilih kategori yang sesuai dengan solver, lalu unggah satu file `.cpp`.
+
+## Walled v1
+
+`Walled/walled-v1.cpp` mengimplementasikan `solveWalled(n, grid)` dalam C++17. Hasilnya adalah semua papan dengan jumlah ratu maksimum, masing-masing sekali dan diurutkan row-major. Papan tanpa sel bebas menghasilkan satu papan kosong.
+
+### Algoritma
+
+1. Setiap garis dibagi menjadi segmen baris, kolom, dan dua diagonal. Hanya sel dinding yang tepat pada garis yang memutus segmen. Setiap segmen dan himpunan kandidat disimpan dalam tiga word 64-bit, cukup untuk 144 sel.
+2. Pilih segmen baris dengan kandidat tersedikit. Coba satu ratu pada setiap kandidat, kemudian cabang tanpa ratu pada segmen tersebut. Setiap pilihan menghapus seluruh sel yang diserang dari kandidat.
+3. Batas atas tambahan ratu adalah jumlah segmen yang masih memiliki kandidat, diambil minimum dari empat arah. Cabang dipangkas hanya jika jumlah ratu ditambah batas ini lebih kecil daripada rekor. Hasil lama dihapus ketika rekor membaik.
+4. Untuk N >= 4 tanpa dinding, gunakan pencarian bitmask satu ratu per baris. N kecil tetap memakai pencarian umum agar maksimum parsial untuk N=2 dan N=3 tetap benar.
+
+Pilihan dalam satu segmen saling terpisah: sebuah papan memiliki tepat satu posisi ratu atau tidak memiliki ratu pada segmen yang dipilih. Pemilihan segmen deterministik dan semua pilihan dicoba. Karena itu setiap papan optimal dicapai sekali. Batas segmen tidak pernah meremehkan kapasitas yang tersisa, sehingga pemangkasan tidak menghilangkan hasil optimal. Jalur disimpan pada array tetap; alokasi hanya dilakukan ketika menyimpan hasil atau snapshot debug. Template debug menghilangkan penghitung dan snapshot dari jalur normal.
+
+### Waktu dan memori
+
+Untuk F sel bebas, batas kasar pencarian adalah eksponensial O(2^F); masalah umum ini tidak memiliki jaminan satu detik untuk setiap susunan dinding. Tiap simpul pencarian menghitung batas dengan O(F) operasi word karena kapasitas bitset tetap. Penyalinan dan pengurutan S hasil berukuran K membutuhkan O(S K log K). Memori kerja tetap untuk maksimum 144 sel, dengan kedalaman rekursi paling besar F; hasil membutuhkan O(S K). Jumlah hasil yang sangat besar juga dapat melampaui batas memori 512 MB, sehingga benchmark terbatas tidak membuktikan batas universal.
+
+### Pengujian dan pengiriman
+
+```bash
+source ~/emsdk/emsdk_env.sh
+npm install
+npm run typecheck
+npm run build:solvers -- --native
+```
+
+Pilih **Submissions/Walled → walled-v1** dan kasus **Walled**. Gunakan versi ini sebagai pembanding untuk v2 dan v3.
+
+### Hasil validasi lokal
+
+Pengujian native: 2.100 papan acak N=1..7 dibandingkan sebagai himpunan lengkap dengan `Solver/example/bruteforce-walled.cpp`, termasuk tanpa dinding dan semua sel berdinding. Semua cocok tanpa duplikasi. Tambahan 150 papan dengan banyak dinding pada N=8..12 (30 seed per ukuran) lolos validator independen; 30 papan N=8 di antaranya juga cocok persis dengan brute force. Jumlah tanpa dinding untuk N=4..12 cocok dengan 2, 10, 4, 40, 92, 352, 724, 2680, 14200. Validator independen memeriksa setiap pasangan ratu dengan berjalan sel demi sel sampai dinding pada seluruh hasil benchmark.
+
+Mesin: Linux x86_64, Intel Core i5-11320H @ 3.20 GHz, GCC 16.1.1 20260515 (Red Hat 16.1.1-2), `g++ -std=c++17 -O2`. Tabel adalah waktu minimum tujuh panggilan solver, termasuk pembuatan hasil tetapi tidak termasuk validasi. Generator memakai `std::mt19937(seed)` dan `std::shuffle` atas indeks sel, lalu memilih W indeks pertama sebagai dinding. Tidak ada kasus tabel yang melebihi 1.000 ms. Angka ini native, bukan WASM atau leaderboard.
+
+| N | W | Seed | Terbaik dari 7 (ms) | Ratu maksimum | Jumlah papan |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 8 | 0 | 11 | 0.021 | 8 | 92 |
+| 8 | 0 | 22 | 0.021 | 8 | 92 |
+| 8 | 0 | 33 | 0.021 | 8 | 92 |
+| 8 | 1 | 11 | 1.166 | 8 | 211 |
+| 8 | 1 | 22 | 2.153 | 8 | 211 |
+| 8 | 1 | 33 | 2.119 | 8 | 211 |
+| 8 | 4 | 11 | 0.907 | 10 | 10 |
+| 8 | 4 | 22 | 1.672 | 9 | 142 |
+| 8 | 4 | 33 | 0.174 | 10 | 1 |
+| 8 | 8 | 11 | 4.668 | 10 | 345 |
+| 8 | 8 | 22 | 1.280 | 10 | 5 |
+| 8 | 8 | 33 | 0.773 | 10 | 34 |
+| 8 | 16 | 11 | 0.716 | 12 | 4 |
+| 8 | 16 | 22 | 0.916 | 10 | 94 |
+| 8 | 16 | 33 | 0.593 | 9 | 16 |
+| 9 | 0 | 11 | 0.090 | 9 | 352 |
+| 9 | 0 | 22 | 0.075 | 9 | 352 |
+| 9 | 0 | 33 | 0.071 | 9 | 352 |
+| 9 | 1 | 11 | 4.063 | 9 | 324 |
+| 9 | 1 | 22 | 9.356 | 9 | 949 |
+| 9 | 1 | 33 | 1.254 | 10 | 2 |
+| 9 | 4 | 11 | 0.594 | 10 | 15 |
+| 9 | 4 | 22 | 9.244 | 10 | 43 |
+| 9 | 4 | 33 | 0.590 | 12 | 2 |
+| 9 | 9 | 11 | 1.271 | 11 | 12 |
+| 9 | 9 | 22 | 1.573 | 12 | 11 |
+| 9 | 9 | 33 | 2.353 | 13 | 11 |
+| 9 | 18 | 11 | 3.833 | 12 | 34 |
+| 9 | 18 | 22 | 11.010 | 12 | 248 |
+| 9 | 18 | 33 | 9.390 | 14 | 75 |
+| 10 | 0 | 11 | 0.505 | 10 | 724 |
+| 10 | 0 | 22 | 0.507 | 10 | 724 |
+| 10 | 0 | 33 | 0.508 | 10 | 724 |
+| 10 | 1 | 11 | 2.214 | 11 | 33 |
+| 10 | 1 | 22 | 2.331 | 11 | 33 |
+| 10 | 1 | 33 | 22.407 | 10 | 3327 |
+| 10 | 5 | 11 | 3.749 | 13 | 7 |
+| 10 | 5 | 22 | 2.476 | 12 | 68 |
+| 10 | 5 | 33 | 6.056 | 13 | 2 |
+| 10 | 10 | 11 | 9.202 | 15 | 2 |
+| 10 | 10 | 22 | 3.904 | 13 | 51 |
+| 10 | 10 | 33 | 15.027 | 15 | 2 |
+| 10 | 20 | 11 | 20.075 | 16 | 159 |
+| 10 | 20 | 22 | 38.220 | 15 | 528 |
+| 10 | 20 | 33 | 16.159 | 16 | 53 |
+| 11 | 0 | 11 | 2.405 | 11 | 2680 |
+| 11 | 0 | 22 | 2.571 | 11 | 2680 |
+| 11 | 0 | 33 | 2.487 | 11 | 2680 |
+| 11 | 1 | 11 | 10.496 | 12 | 188 |
+| 11 | 1 | 22 | 8.228 | 12 | 68 |
+| 11 | 1 | 33 | 6.743 | 12 | 94 |
+| 11 | 5 | 11 | 9.177 | 13 | 104 |
+| 11 | 5 | 22 | 5.684 | 13 | 482 |
+| 11 | 5 | 33 | 31.607 | 14 | 200 |
+| 11 | 11 | 11 | 61.074 | 15 | 2 |
+| 11 | 11 | 22 | 2.794 | 16 | 4 |
+| 11 | 11 | 33 | 9.595 | 16 | 7 |
+| 11 | 22 | 11 | 43.321 | 17 | 18 |
+| 11 | 22 | 22 | 40.231 | 19 | 2 |
+| 11 | 22 | 33 | 15.385 | 18 | 47 |
+| 12 | 0 | 11 | 13.774 | 12 | 14200 |
+| 12 | 0 | 22 | 13.773 | 12 | 14200 |
+| 12 | 0 | 33 | 13.738 | 12 | 14200 |
+| 12 | 1 | 11 | 588.050 | 12 | 43738 |
+| 12 | 1 | 22 | 48.235 | 13 | 584 |
+| 12 | 1 | 33 | 666.797 | 12 | 71710 |
+| 12 | 6 | 11 | 5.621 | 16 | 15 |
+| 12 | 6 | 22 | 106.347 | 15 | 494 |
+| 12 | 6 | 33 | 13.047 | 15 | 135 |
+| 12 | 12 | 11 | 58.023 | 18 | 188 |
+| 12 | 12 | 22 | 26.030 | 18 | 36 |
+| 12 | 12 | 33 | 52.548 | 17 | 79 |
+| 12 | 24 | 11 | 70.632 | 23 | 47 |
+| 12 | 24 | 22 | 128.147 | 21 | 3 |
+| 12 | 24 | 33 | 37.720 | 22 | 7 |
+
+## Walled v2
+
+[Walled/walled-v2.cpp](Walled/walled-v2.cpp) memakai bitmask per baris untuk papan dengan sedikit segmen tambahan. Dinding menghentikan rambatan serangan kolom atau diagonal sebelum mask digeser ke baris berikutnya. Pada papan kosong, solver memakai simetri cermin. Pada papan dengan lebih banyak segmen, solver mengelompokkan kandidat yang saling menyerang dan memakai jumlah kelompok sebagai batas atas.
+
+Dalam pengujian WASM lokal, v2 mengembalikan himpunan solusi yang sama dengan v1 pada 75 papan berukuran 8 sampai 12 dan lebih cepat pada 69 papan tersebut. Waktu terbaik dari tujuh percobaan pada papan 12×12 dengan satu dinding (seed 33) turun dari 570,1 ms ke 46,8 ms. Pengukuran memakai Intel Core i5-11320H, Emscripten 7.0.1, dan Node.js 22.22.2.
+
+## Walled v3
+
+[Walled/walled-v3.cpp](Walled/walled-v3.cpp) membagi sel bebas menjadi segmen pada empat arah. Pencarian berjalan pada arah baris atau kolom yang memiliki lebih sedikit segmen. Setiap segmen menyimpan kandidat dalam bitmask 16-bit, cukup untuk satu ruas dengan paling banyak 12 sel. Solver memilih segmen dengan kandidat tersedikit, lalu mencoba setiap posisi ratu yang masih aman dan pilihan melewati segmen jika jumlah target masih dapat tercapai.
+
+Pencarian dimulai dari target sebesar jumlah segmen pada arah yang dipilih. Jika target belum tercapai, solver menurunkannya satu per satu. Pada target pertama yang tercapai, solver menyelesaikan pencarian untuk mengembalikan semua susunan optimal dalam urutan koordinat baris lalu kolom. Papan penuh dinding menghasilkan satu susunan kosong.
+
+Hasil native cocok dengan brute force pada seluruh 66.066 tata letak dinding untuk ukuran 1 sampai 4. Build WebAssembly berhasil, dan papan kosong 12×12 menghasilkan 14.200 solusi.
+
+Untuk menguji v3, pilih kasus **Walled** dan solver **Submissions/Walled → walled-v3**. Untuk leaderboard, pilih kasus **Walled** dan unggah [Walled/walled-v3.cpp](Walled/walled-v3.cpp).

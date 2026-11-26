@@ -7,6 +7,12 @@ A local browser app for testing N-Queens solvers written in C++. A solver is a p
 - Board size N = 4 to 12.
 - Problem cases: Normal, Pre-placed (P = 0 to N-1 locked queens), Holes and Walled.
 
+## Tapip Anonim submissions
+
+- [Normal v1](Solver/Submissions/README.md#normal-v1) and [Normal v2](Solver/Submissions/README.md#normal-v2)
+- [Pre-placed v1](Solver/Submissions/README.md#pre-placed-v1) and [Pre-placed v2](Solver/Submissions/README.md#pre-placed-v2)
+- [Walled v1](Solver/Submissions/README.md#walled-v1), [Walled v2](Solver/Submissions/README.md#walled-v2), and [Walled v3](Solver/Submissions/README.md#walled-v3)
+
 ## Prerequisites
 
 - Node.js >= 20 (LTS)
