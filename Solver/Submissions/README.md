@@ -66,7 +66,7 @@ npm run build:solvers -- --native
 npm run dev
 ```
 
-Di tester, pilih kasus **Normal** dan solver **normal-v1**, **normal-v2**, atau **normal-v3** di grup **Submissions/Normal**. Untuk kasus **Pre-placed**, pilih **preplaced-v1** atau **preplaced-v2** di grup **Submissions/Preplaced**. Untuk kasus **Walled**, pilih **walled-v1**, **walled-v2**, atau **walled-v3** di grup **Submissions/Walled**. Klik **Apply changes** setelah mengubah papan, lalu klik **Run**.
+Di tester, pilih kasus **Normal** dan solver **normal-v1**, **normal-v2**, atau **normal-v3** di grup **Submissions/Normal**. Untuk kasus **Pre-placed**, pilih **preplaced-v1** atau **preplaced-v2** di grup **Submissions/Preplaced**. Untuk kasus **Walled**, pilih **walled-v1**, **walled-v2**, **walled-v3**, atau **walled-v4** di grup **Submissions/Walled**. Klik **Apply changes** setelah mengubah papan, lalu klik **Run**.
 
 Untuk leaderboard, pilih kategori yang sesuai dengan solver, lalu unggah satu file `.cpp`.
 
@@ -104,84 +104,6 @@ Pengujian native: 2.100 papan acak N=1..7 dibandingkan sebagai himpunan lengkap 
 
 Mesin: Linux x86_64, Intel Core i5-11320H @ 3.20 GHz, GCC 16.1.1 20260515 (Red Hat 16.1.1-2), `g++ -std=c++17 -O2`. Tabel adalah waktu minimum tujuh panggilan solver, termasuk pembuatan hasil tetapi tidak termasuk validasi. Generator memakai `std::mt19937(seed)` dan `std::shuffle` atas indeks sel, lalu memilih W indeks pertama sebagai dinding. Tidak ada kasus tabel yang melebihi 1.000 ms. Angka ini native, bukan WASM atau leaderboard.
 
-| N | W | Seed | Terbaik dari 7 (ms) | Ratu maksimum | Jumlah papan |
-| ---: | ---: | ---: | ---: | ---: | ---: |
-| 8 | 0 | 11 | 0.021 | 8 | 92 |
-| 8 | 0 | 22 | 0.021 | 8 | 92 |
-| 8 | 0 | 33 | 0.021 | 8 | 92 |
-| 8 | 1 | 11 | 1.166 | 8 | 211 |
-| 8 | 1 | 22 | 2.153 | 8 | 211 |
-| 8 | 1 | 33 | 2.119 | 8 | 211 |
-| 8 | 4 | 11 | 0.907 | 10 | 10 |
-| 8 | 4 | 22 | 1.672 | 9 | 142 |
-| 8 | 4 | 33 | 0.174 | 10 | 1 |
-| 8 | 8 | 11 | 4.668 | 10 | 345 |
-| 8 | 8 | 22 | 1.280 | 10 | 5 |
-| 8 | 8 | 33 | 0.773 | 10 | 34 |
-| 8 | 16 | 11 | 0.716 | 12 | 4 |
-| 8 | 16 | 22 | 0.916 | 10 | 94 |
-| 8 | 16 | 33 | 0.593 | 9 | 16 |
-| 9 | 0 | 11 | 0.090 | 9 | 352 |
-| 9 | 0 | 22 | 0.075 | 9 | 352 |
-| 9 | 0 | 33 | 0.071 | 9 | 352 |
-| 9 | 1 | 11 | 4.063 | 9 | 324 |
-| 9 | 1 | 22 | 9.356 | 9 | 949 |
-| 9 | 1 | 33 | 1.254 | 10 | 2 |
-| 9 | 4 | 11 | 0.594 | 10 | 15 |
-| 9 | 4 | 22 | 9.244 | 10 | 43 |
-| 9 | 4 | 33 | 0.590 | 12 | 2 |
-| 9 | 9 | 11 | 1.271 | 11 | 12 |
-| 9 | 9 | 22 | 1.573 | 12 | 11 |
-| 9 | 9 | 33 | 2.353 | 13 | 11 |
-| 9 | 18 | 11 | 3.833 | 12 | 34 |
-| 9 | 18 | 22 | 11.010 | 12 | 248 |
-| 9 | 18 | 33 | 9.390 | 14 | 75 |
-| 10 | 0 | 11 | 0.505 | 10 | 724 |
-| 10 | 0 | 22 | 0.507 | 10 | 724 |
-| 10 | 0 | 33 | 0.508 | 10 | 724 |
-| 10 | 1 | 11 | 2.214 | 11 | 33 |
-| 10 | 1 | 22 | 2.331 | 11 | 33 |
-| 10 | 1 | 33 | 22.407 | 10 | 3327 |
-| 10 | 5 | 11 | 3.749 | 13 | 7 |
-| 10 | 5 | 22 | 2.476 | 12 | 68 |
-| 10 | 5 | 33 | 6.056 | 13 | 2 |
-| 10 | 10 | 11 | 9.202 | 15 | 2 |
-| 10 | 10 | 22 | 3.904 | 13 | 51 |
-| 10 | 10 | 33 | 15.027 | 15 | 2 |
-| 10 | 20 | 11 | 20.075 | 16 | 159 |
-| 10 | 20 | 22 | 38.220 | 15 | 528 |
-| 10 | 20 | 33 | 16.159 | 16 | 53 |
-| 11 | 0 | 11 | 2.405 | 11 | 2680 |
-| 11 | 0 | 22 | 2.571 | 11 | 2680 |
-| 11 | 0 | 33 | 2.487 | 11 | 2680 |
-| 11 | 1 | 11 | 10.496 | 12 | 188 |
-| 11 | 1 | 22 | 8.228 | 12 | 68 |
-| 11 | 1 | 33 | 6.743 | 12 | 94 |
-| 11 | 5 | 11 | 9.177 | 13 | 104 |
-| 11 | 5 | 22 | 5.684 | 13 | 482 |
-| 11 | 5 | 33 | 31.607 | 14 | 200 |
-| 11 | 11 | 11 | 61.074 | 15 | 2 |
-| 11 | 11 | 22 | 2.794 | 16 | 4 |
-| 11 | 11 | 33 | 9.595 | 16 | 7 |
-| 11 | 22 | 11 | 43.321 | 17 | 18 |
-| 11 | 22 | 22 | 40.231 | 19 | 2 |
-| 11 | 22 | 33 | 15.385 | 18 | 47 |
-| 12 | 0 | 11 | 13.774 | 12 | 14200 |
-| 12 | 0 | 22 | 13.773 | 12 | 14200 |
-| 12 | 0 | 33 | 13.738 | 12 | 14200 |
-| 12 | 1 | 11 | 588.050 | 12 | 43738 |
-| 12 | 1 | 22 | 48.235 | 13 | 584 |
-| 12 | 1 | 33 | 666.797 | 12 | 71710 |
-| 12 | 6 | 11 | 5.621 | 16 | 15 |
-| 12 | 6 | 22 | 106.347 | 15 | 494 |
-| 12 | 6 | 33 | 13.047 | 15 | 135 |
-| 12 | 12 | 11 | 58.023 | 18 | 188 |
-| 12 | 12 | 22 | 26.030 | 18 | 36 |
-| 12 | 12 | 33 | 52.548 | 17 | 79 |
-| 12 | 24 | 11 | 70.632 | 23 | 47 |
-| 12 | 24 | 22 | 128.147 | 21 | 3 |
-| 12 | 24 | 33 | 37.720 | 22 | 7 |
-
 ## Walled v2
 
 [Walled/walled-v2.cpp](Walled/walled-v2.cpp) memakai bitmask per baris untuk papan dengan sedikit segmen tambahan. Dinding menghentikan rambatan serangan kolom atau diagonal sebelum mask digeser ke baris berikutnya. Pada papan kosong, solver memakai simetri cermin. Pada papan dengan lebih banyak segmen, solver mengelompokkan kandidat yang saling menyerang dan memakai jumlah kelompok sebagai batas atas.
@@ -197,3 +119,41 @@ Pencarian dimulai dari target sebesar jumlah segmen pada arah yang dipilih. Jika
 Hasil native cocok dengan brute force pada seluruh 66.066 tata letak dinding untuk ukuran 1 sampai 4. Build WebAssembly berhasil, dan papan kosong 12×12 menghasilkan 14.200 solusi.
 
 Untuk menguji v3, pilih kasus **Walled** dan solver **Submissions/Walled → walled-v3**. Untuk leaderboard, pilih kasus **Walled** dan unggah [Walled/walled-v3.cpp](Walled/walled-v3.cpp).
+
+## Walled v4
+
+V4 mengimplementasikan `solveWalled(n, grid)` dan mengembalikan semua susunan dengan jumlah ratu maksimum. Koordinat di setiap susunan diurutkan berdasarkan baris lalu kolom. File solver tersedia di [Walled/walled-v4.cpp](Walled/walled-v4.cpp).
+
+### Algoritma
+
+- Pada papan tanpa dinding, v4 memakai pencarian bitmask per baris dan menghasilkan pasangan solusi cermin. Pada papan dengan satu dinding, v4 memakai pencarian per baris dengan serangan yang berhenti di dinding.
+- Pada papan dengan lebih banyak dinding, v4 mengemas setiap segmen ke dalam satu word 64-bit tanpa melintasi batas antarword. Mask serangan dibuat dengan menelusuri setiap arah hingga dinding atau tepi. Operasi bit menghitung segmen aktif dan memilih segmen dengan kandidat tersedikit.
+- Matching maksimum antara segmen horizontal dan vertikal dihitung sekali sebagai batas atas awal. Solver menurunkan target hingga menemukan solusi dan mengumpulkan semua susunan pada target itu.
+
+### Validasi dan benchmark lokal
+
+V4 cocok dengan brute force pada 66.066 tata letak dinding untuk N=1 sampai 4 dan 2.100 papan acak untuk N=1 sampai 7. Hasilnya juga cocok dengan v3 pada 150 papan untuk N=8 sampai 12 dan enam kasus di sekitar batas 64 dan 128 sel bebas.
+
+Tabel memakai harness WASM lokal pada Intel Core i5-11320H, Emscripten 7.0.1, dan Node.js 22.22.2. Waktu adalah nilai terbaik dari tujuh run setelah pemanasan. Memori dihitung oleh tester dalam byte. Papan acak memakai seed 22, kecuali papan satu dinding yang memakai seed 33.
+
+| Papan 12×12 | Solusi | v2 (ms) | v3 (ms) | v4 (ms) | Memori v3 (B) | Memori v4 (B) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Tanpa dinding | 14.200 | 4,655 | 15,116 | 4,522 | 1.650.231 | 1.600.844 |
+| 1 dinding | 71.710 | 14,547 | 25,714 | 15,341 | 8.283.307 | 8.234.624 |
+| 6 dinding | 494 | 15,561 | 2,830 | 1,626 | 119.893 | 78.071 |
+| 24 dinding | 3 | 2,318 | 2,150 | 0,889 | 52.861 | 8.523 |
+| 80 dinding | 2.088 | 19,416 | 58,677 | 21,453 | 520.625 | 473.556 |
+| 9 segmen terpisah | 19.683 | 3,036 | 2,773 | 2,161 | 1.799.958 | 1.755.683 |
+
+### Build dan submit
+
+Jalankan dari root repo dalam terminal yang sama.
+
+```bash
+source ~/emsdk/emsdk_env.sh
+npm run build:solvers -- --native
+```
+
+Cek baris `Building Submissions/Walled/walled-v4 ... ok`, lalu pilih kasus **Walled** dan solver **Submissions/Walled → walled-v4**.
+
+Untuk leaderboard, pilih kasus **Walled** dan unggah langsung file sumber [Walled/walled-v4.cpp](Walled/walled-v4.cpp). Jika muncul `Execution Error (missing)`, periksa kategori dan nama file pada detail submission. Kategori menentukan fungsi yang dipanggil, dan v4 menyediakan `solveWalled()`.

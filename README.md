@@ -11,7 +11,7 @@ A local browser app for testing N-Queens solvers written in C++. A solver is a p
 
 - [Normal v1](Solver/Submissions/README.md#normal-v1) and [Normal v2](Solver/Submissions/README.md#normal-v2)
 - [Pre-placed v1](Solver/Submissions/README.md#pre-placed-v1) and [Pre-placed v2](Solver/Submissions/README.md#pre-placed-v2)
-- [Walled v1](Solver/Submissions/README.md#walled-v1), [Walled v2](Solver/Submissions/README.md#walled-v2), and [Walled v3](Solver/Submissions/README.md#walled-v3)
+- [Walled v1](Solver/Submissions/README.md#walled-v1), [Walled v2](Solver/Submissions/README.md#walled-v2), [Walled v3](Solver/Submissions/README.md#walled-v3), and [Walled v4](Solver/Submissions/README.md#walled-v4)
 
 ## Prerequisites
 
